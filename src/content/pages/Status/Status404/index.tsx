@@ -7,15 +7,15 @@ import {
   Button,
   FormControl,
   OutlinedInput,
-  InputAdornment
-} from '@mui/material';
-import { Helmet } from 'react-helmet-async';
-import SearchTwoToneIcon from '@mui/icons-material/SearchTwoTone';
+  InputAdornment,
+} from "@mui/material";
+import { Helmet } from "react-helmet-async";
+import SearchTwoToneIcon from "@mui/icons-material/SearchTwoTone";
 
-import { styled } from '@mui/material/styles';
+import { styled } from "@mui/material/styles";
 
 const MainContent = styled(Box)(
-  ({ theme }) => `
+  () => `
     height: 100%;
     display: flex;
     flex: 1;
@@ -55,14 +55,13 @@ function Status404() {
               variant="h4"
               color="text.secondary"
               fontWeight="normal"
-              sx={{ mb: 4 }}
-            >
+              sx={{ mb: 4 }}>
               It's on us, we moved the content to a different page. The search
               below should help!
             </Typography>
           </Box>
           <Container maxWidth="sm">
-            <Card sx={{ textAlign: 'center', mt: 3, p: 4 }}>
+            <Card sx={{ textAlign: "center", mt: 3, p: 4 }}>
               <FormControl variant="outlined" fullWidth>
                 <OutlinedInputWrapper
                   type="text"

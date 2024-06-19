@@ -38,22 +38,25 @@ export default function SignIn() {
     const data = new FormData(event.currentTarget);
     const username = data.get("email");
     const password = data.get("password");
+
     // console.log({
     //   email: data.get("email"),
     //   password: data.get("password"),
     // });
     try {
-      const response = await signIn(username, password);
+      if (typeof username === "string" && typeof password === "string") {
+        const response = await signIn(username, password);
 
-      if (response) {
-        window.location.href = "/dashboards/crypto";
-      } else {
-        console.error("Error en la autenticación:");
-        setErrorMessage("Error en la autenticación:");
+        if (response) {
+          window.location.href = "/dashboards/crypto";
+        } else {
+          console.error("Error en la autenticación:");
+          setErrorMessage("Error en la autenticación:");
+        }
       }
-    } catch (error) {
-      console.error("Error en la solicitud:");
-      setErrorMessage("Error en la solicitud");
+    } catch (error: any) {
+      console.error("Request error:", error.message);
+      setErrorMessage("Error en la solicitud: " + error.message);
     }
   };
 
@@ -77,7 +80,15 @@ export default function SignIn() {
             backgroundPosition: "center",
           }}
         />
-        <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+        <Grid
+          item
+          xs={12}
+          sm={8}
+          md={5}
+          component={Paper}
+          elevation={30}
+          square
+          mt={30}>
           <Box
             sx={{
               my: 8,
@@ -86,10 +97,7 @@ export default function SignIn() {
               flexDirection: "column",
               alignItems: "center",
             }}>
-            <img
-              src="/static/images/pharmaser/logoPharmaser.png"
-              width={230}
-            />
+            <img src="/static/images/pharmaser/logoPharmaser.png" width={230} />
             <Box
               component="form"
               noValidate
@@ -100,6 +108,7 @@ export default function SignIn() {
                 required
                 fullWidth
                 id="email"
+                type="text"
                 label="Usuario"
                 name="email"
                 autoComplete="email"

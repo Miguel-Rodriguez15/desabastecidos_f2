@@ -1,10 +1,4 @@
-import {
-  forwardRef,
-  Ref,
-  useState,
-  ChangeEvent,
-  ReactElement,
-} from "react";
+import { forwardRef, Ref, useState, ChangeEvent, ReactElement } from "react";
 import {
   Avatar,
   Link,
@@ -13,14 +7,12 @@ import {
   List,
   ListItem,
   ListItemAvatar,
-  TextField,
   Theme,
   Typography,
   Dialog,
   DialogContent,
   DialogTitle,
   Slide,
-  Hidden,
   CircularProgress,
   FormControl,
   Button,
@@ -45,7 +37,7 @@ const Transition = forwardRef(function Transition(
 const DialogWrapper = styled(Dialog)(
   () => `
     .MuiDialog-container {
-        height: auto;
+      backdrop-filter: none;
     }
 
     .MuiDialog-paperScrollPaper {
@@ -86,11 +78,13 @@ function HeaderSearch() {
 
   const [openSearchResults, setOpenSearchResults] = useState(false);
   const [searchValue, setSearchValue] = useState("");
-  const [searchResults, setSearchResults] = useState<SearchResult[] | undefined>(undefined);
+  const [searchResults, setSearchResults] = useState<
+    SearchResult[] | undefined
+  >(undefined);
   const [selectedResult, setSelectedResult] = useState<SearchResult | null>(
     null
   );
-  const [cache, setCache] = useState<{ [key: string]: SearchResult[] }>({});
+  const [_cache, setCache] = useState<{ [key: string]: SearchResult[] }>({});
   const handleSearchResults = (data: SearchResult[], query: string) => {
     setCache((prevCache) => ({ ...prevCache, [query]: data }));
     setSearchResults(data);
@@ -102,7 +96,9 @@ function HeaderSearch() {
     setLoading(true);
 
     const timeoutId = setTimeout(async () => {
-      const responseData = await fetchData(`/excel/search?query=${query}`) as SearchResult[];
+      const responseData = (await fetchData(
+        `/excel/search?query=${query}`
+      )) as SearchResult[];
       handleSearchResults(responseData, query);
       setLoading(false);
     }, 1500);
@@ -134,22 +130,38 @@ function HeaderSearch() {
     setSelectedResult(result);
   };
 
-  const [open, setOpen] = useState(false);
+  const [_open, setOpen] = useState(false);
 
   const handleClose = () => {
     setOpen(false);
   };
 
   return (
-    <>
-      <DialogWrapper
-        open={true}
-        TransitionComponent={Transition}
-        keepMounted
-        maxWidth="md"
-        fullWidth
-        scroll="paper"
-        onClose={handleClose}>
+    <DialogWrapper
+      open={true}
+      TransitionComponent={Transition}
+      keepMounted
+      maxWidth="md"
+      fullWidth
+      scroll="paper"
+      onClose={handleClose}>
+      <Box
+        sx={{ minWidth: 275, padding: 2 }}
+        style={{ textAlign: "center", margin: "auto" }}>
+        {" "}
+        <img src="/static/images/search/search.svg" height={200} width={200} />
+      </Box>
+      <Box
+        sx={{ minWidth: 275, padding: 2 }}
+        style={{ textAlign: "center", margin: "auto" }}>
+        {" "}
+        <h2>Bienvenidoal sistema de desabastesidos</h2>
+        <h4>
+          A continuacion escribe el medicamento que deseas consultar para saber
+          si no se encuentra diponible
+        </h4>
+      </Box>
+      <>
         <DialogTitleWrapper>
           <FormControl variant="outlined" fullWidth>
             <OutlinedInputWrapper
@@ -160,7 +172,10 @@ function HeaderSearch() {
               placeholder="Busca tu medicamento"
               endAdornment={
                 <InputAdornment position="end">
-                  <ButtonSearch variant="contained" style={{ color: "#fff" }} size="small">
+                  <ButtonSearch
+                    variant="contained"
+                    style={{ color: "#fff" }}
+                    size="small">
                     Search
                   </ButtonSearch>
                 </InputAdornment>
@@ -181,7 +196,7 @@ function HeaderSearch() {
               display="flex"
               justifyContent="space-between">
               <Typography variant="body2" component="span">
-                Resultados para: {" "}
+                Resultados para:{" "}
                 <Typography
                   sx={{ fontWeight: "bold" }}
                   variant="body1"
@@ -191,69 +206,67 @@ function HeaderSearch() {
               </Typography>
             </Box>
 
-            {
-              loading && (
-                <Box
-                  display="flex"
-                  justifyContent="center"
-                  alignItems="center"
-                  height="100%">
-                  <CircularProgress />
-                </Box>
-              )
-            }
+            {loading && (
+              <Box
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                height="100%">
+                <CircularProgress />
+              </Box>
+            )}
 
-            {
-              searchResults && searchResults.length === 0 ? (
-                <ResultSearchDrug message={"tu medicamento puede que se encuentre disponible"} />
-              ) : (
-                <List disablePadding>
-                  {searchResults?.map((result, index) => (
-                    <ListItem
-                      key={index}
-                      onClick={() => handleResultClick(result)}>
-                      <ListItemAvatar>
-                        <Avatar
-                          sx={{
-                            background: (theme: Theme) =>
-                              theme.palette.secondary.main,
-                          }}>
-                          <FindInPageTwoToneIcon />
-                        </Avatar>
-                      </ListItemAvatar>
-                      <Box flex="1">
-                        <Box display="flex" justifyContent="space-between">
-                          <Link
-                            href="#"
-                            underline="hover"
-                            sx={{ fontWeight: "bold" }}
-                            variant="body2">
-                            {result.molecula}
-                            <Typography component="span" variant="body2">
-                              {" "}
-                              ({result.concentracion})
-                            </Typography>
-                          </Link>
-                        </Box>
-                        <Box display="flex" justifyContent="space-between">
-                          <Typography
-                            component="span"
-                            variant="body2"
-                            sx={{
-                              color: (theme: Theme) =>
-                                lighten(theme.palette.secondary.main, 0.5),
-                            }}>
+            {searchResults && searchResults.length === 0 ? (
+              <ResultSearchDrug
+                message={"tu medicamento puede que se encuentre disponible"}
+              />
+            ) : (
+              <List disablePadding>
+                {searchResults?.map((result, index) => (
+                  <ListItem
+                    key={index}
+                    onClick={() => handleResultClick(result)}>
+                    <ListItemAvatar>
+                      <Avatar
+                        sx={{
+                          background: (theme: Theme) =>
+                            theme.palette.secondary.main,
+                        }}>
+                        <FindInPageTwoToneIcon />
+                      </Avatar>
+                    </ListItemAvatar>
+                    <Box flex="1">
+                      <Box display="flex" justifyContent="space-between">
+                        <Link
+                          href="#"
+                          underline="hover"
+                          sx={{ fontWeight: "bold" }}
+                          variant="body2">
+                          {result.molecula}
+                          <Typography component="span" variant="body2">
                             {" "}
-                            {result.nombreComercial}
-                          </Typography>{" "}
-                        </Box>
+                            ({result.concentracion})
+                          </Typography>
+                        </Link>
                       </Box>
-                      <ChevronRightTwoToneIcon />
-                    </ListItem>
-                  ))}
-                </List>
-              )
-            }
+                      <Box display="flex" justifyContent="space-between">
+                        <Typography
+                          component="span"
+                          variant="body2"
+                          sx={{
+                            color: (theme: Theme) =>
+                              lighten(theme.palette.secondary.main, 0.5),
+                          }}>
+                          {" "}
+                          {result.nombreComercial}
+                        </Typography>{" "}
+                      </Box>
+                    </Box>
+                    <ChevronRightTwoToneIcon />
+                  </ListItem>
+                ))}
+              </List>
+            )}
           </DialogContent>
         )}
 
@@ -266,8 +279,8 @@ function HeaderSearch() {
             fechaFinAgotado={selectedResult.fechaFinAgotado}
           />
         )}
-      </DialogWrapper>
-    </>
+      </>
+    </DialogWrapper>
   );
 }
 

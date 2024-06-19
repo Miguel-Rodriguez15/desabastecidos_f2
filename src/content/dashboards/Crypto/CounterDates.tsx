@@ -20,32 +20,33 @@ export default function CounterDates() {
     todayFiles: 0,
   });
   useEffect(() => {
-    const token = localStorage.getItem("token");
-
     const fetchStats = async () => {
       const data = await fetchData("/excel");
       const now = new Date();
 
       const dbFiles = data?.length ?? 0;
-      const monthFiles = data?.filter((item) => {
-        const date = new Date(item.uploadDate);
-        return (
-          date.getMonth() === now.getMonth() &&
-          date.getFullYear() === now.getFullYear()
-        );
-      }).length ?? 0;
+      const monthFiles =
+        data?.filter((item: { uploadDate: string | number | Date }) => {
+          const date = new Date(item.uploadDate);
+          return (
+            date.getMonth() === now.getMonth() &&
+            date.getFullYear() === now.getFullYear()
+          );
+        }).length ?? 0;
 
       const oneWeekAgo = new Date();
       oneWeekAgo.setDate(now.getDate() - 7);
-      const weekFiles = data?.filter((item) => {
-        const date = new Date(item.uploadDate);
-        return date >= oneWeekAgo && date <= now;
-      }).length ?? 0;
+      const weekFiles =
+        data?.filter((item: { uploadDate: string | number | Date }) => {
+          const date = new Date(item.uploadDate);
+          return date >= oneWeekAgo && date <= now;
+        }).length ?? 0;
 
-      const todayFiles = data?.filter((item) => {
-        const date = new Date(item.uploadDate);
-        return date.toDateString() === now.toDateString();
-      }).length ?? 0;
+      const todayFiles =
+        data?.filter((item: { uploadDate: string | number | Date }) => {
+          const date = new Date(item.uploadDate);
+          return date.toDateString() === now.toDateString();
+        }).length ?? 0;
 
       setStats({
         dbFiles,

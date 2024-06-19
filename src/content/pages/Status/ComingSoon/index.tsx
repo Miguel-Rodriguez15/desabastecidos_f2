@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 import {
   Box,
   Typography,
@@ -10,16 +10,15 @@ import {
   FormControl,
   InputAdornment,
   Button,
-  FormHelperText
-} from '@mui/material';
-import { Helmet } from 'react-helmet-async';
-
-import { styled } from '@mui/material/styles';
-import FacebookIcon from '@mui/icons-material/Facebook';
-import TwitterIcon from '@mui/icons-material/Twitter';
-import InstagramIcon from '@mui/icons-material/Instagram';
-import MailTwoToneIcon from '@mui/icons-material/MailTwoTone';
-import Logo from '../../../../components/LogoSign';
+  FormHelperText,
+} from "@mui/material";
+import { Helmet } from "react-helmet-async";
+import { styled } from "@mui/material/styles";
+import FacebookIcon from "@mui/icons-material/Facebook";
+import TwitterIcon from "@mui/icons-material/Twitter";
+import InstagramIcon from "@mui/icons-material/Instagram";
+import MailTwoToneIcon from "@mui/icons-material/MailTwoTone";
+import Logo from "../../../../components/LogoSign";
 
 const MainContent = styled(Box)(
   () => `
@@ -35,19 +34,19 @@ const MainContent = styled(Box)(
 
 const TypographyH1 = styled(Typography)(
   ({ theme }) => `
-  font-size: ${theme.typography.pxToRem(75)};
+    font-size: ${theme.typography.pxToRem(75)};
 `
 );
 
 const TypographyH3 = styled(Typography)(
   ({ theme }) => `
-  color: ${theme.colors.alpha.black[50]};
+    color: ${theme.palette.text.secondary};
 `
 );
 
 const OutlinedInputWrapper = styled(OutlinedInput)(
   ({ theme }) => `
-    background-color: ${theme.colors.alpha.white[100]};
+    background-color: ${theme.palette.background.paper};
 `
 );
 
@@ -60,42 +59,32 @@ const ButtonNotify = styled(Button)(
 function StatusComingSoon() {
   const calculateTimeLeft = () => {
     const difference = +new Date(`2023`) - +new Date();
-    let timeLeft = {};
-
-    if (difference > 0) {
-      timeLeft = {
-        days: Math.floor(difference / (1000 * 60 * 60 * 24)),
-        hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
-        minutes: Math.floor((difference / 1000 / 60) % 60),
-        seconds: Math.floor((difference / 1000) % 60)
-      };
+    if (difference <= 0) {
+      return null;
     }
 
-    return timeLeft;
+    return {
+      days: Math.floor(difference / (1000 * 60 * 60 * 24)),
+      hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
+      minutes: Math.floor((difference / (1000 * 60)) % 60),
+      seconds: Math.floor((difference / 1000) % 60),
+    };
   };
 
-  const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
+  const [timeLeft, setTimeLeft] = useState<{
+    days: number;
+    hours: number;
+    minutes: number;
+    seconds: number;
+  } | null>(calculateTimeLeft());
 
   useEffect(() => {
-    setTimeout(() => {
+    const timer = setTimeout(() => {
       setTimeLeft(calculateTimeLeft());
     }, 1000);
-  });
 
-  const timerComponents: React.ReactNode[] = [];
-
-  Object.keys(timeLeft).forEach((interval) => {
-    if (!timeLeft[interval]) {
-      return;
-    }
-
-    timerComponents.push(
-      <Box textAlign="center" px={3}>
-        <TypographyH1 variant="h1">{timeLeft[interval]}</TypographyH1>
-        <TypographyH3 variant="h3">{interval}</TypographyH3>
-      </Box>
-    );
-  });
+    return () => clearTimeout(timer);
+  }, [timeLeft]);
 
   return (
     <>
@@ -114,8 +103,7 @@ function StatusComingSoon() {
                 variant="h3"
                 color="text.secondary"
                 fontWeight="normal"
-                sx={{ mb: 4 }}
-              >
+                sx={{ mb: 4 }}>
                 We're working on implementing the last features before our
                 launch!
               </Typography>
@@ -128,11 +116,32 @@ function StatusComingSoon() {
           </Box>
 
           <Box display="flex" justifyContent="center">
-            {timerComponents.length ? timerComponents : <>Time's up!</>}
+            {timeLeft ? (
+              <>
+                <Box textAlign="center" px={3}>
+                  <TypographyH1 variant="h1">{timeLeft.days}</TypographyH1>
+                  <TypographyH3 variant="h3">Days</TypographyH3>
+                </Box>
+                <Box textAlign="center" px={3}>
+                  <TypographyH1 variant="h1">{timeLeft.hours}</TypographyH1>
+                  <TypographyH3 variant="h3">Hours</TypographyH3>
+                </Box>
+                <Box textAlign="center" px={3}>
+                  <TypographyH1 variant="h1">{timeLeft.minutes}</TypographyH1>
+                  <TypographyH3 variant="h3">Minutes</TypographyH3>
+                </Box>
+                <Box textAlign="center" px={3}>
+                  <TypographyH1 variant="h1">{timeLeft.seconds}</TypographyH1>
+                  <TypographyH3 variant="h3">Seconds</TypographyH3>
+                </Box>
+              </>
+            ) : (
+              <Typography variant="h2">Time's up!</Typography>
+            )}
           </Box>
 
           <Container maxWidth="sm">
-            <Box sx={{ textAlign: 'center', p: 4 }}>
+            <Box sx={{ textAlign: "center", p: 4 }}>
               <FormControl variant="outlined" fullWidth>
                 <OutlinedInputWrapper
                   type="text"
@@ -155,7 +164,7 @@ function StatusComingSoon() {
                 </FormHelperText>
               </FormControl>
               <Divider sx={{ my: 4 }} />
-              <Box sx={{ textAlign: 'center' }}>
+              <Box sx={{ textAlign: "center" }}>
                 <Tooltip arrow placement="top" title="Facebook">
                   <IconButton color="primary">
                     <FacebookIcon />

@@ -1,5 +1,4 @@
-import { Typography, Avatar, Grid } from '@mui/material';
-import { useTheme } from '@mui/material/styles';
+import { Typography, Grid } from "@mui/material";
 
 function PageHeader() {
   return (

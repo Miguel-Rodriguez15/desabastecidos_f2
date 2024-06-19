@@ -1,34 +1,34 @@
-import { useEffect, useState } from 'react';
-import Paper from '@mui/material/Paper';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TablePagination from '@mui/material/TablePagination';
-import TableRow from '@mui/material/TableRow';
-import Button from '@mui/material/Button';
-import DateUpload from './DateUpload';
+import { useEffect, useState } from "react";
+import Paper from "@mui/material/Paper";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TablePagination from "@mui/material/TablePagination";
+import TableRow from "@mui/material/TableRow";
+import Button from "@mui/material/Button";
+import DateUpload from "./DateUpload";
 
 interface Column {
-  id: 'id' | 'uploadDate' | 'user' | 'accion';
+  id: "id" | "uploadDate" | "user" | "accion";
   label: string;
   minWidth?: number;
-  align?: 'right' | 'left';
+  align?: "right" | "left";
   format?: (value: any) => string;
 }
 
 const columns: readonly Column[] = [
-  { id: 'id', label: 'Identificador de archivo', minWidth: 50, align: 'left' },
+  { id: "id", label: "Identificador de archivo", minWidth: 50, align: "left" },
   {
-    id: 'uploadDate',
-    label: 'Fecha de cargue',
+    id: "uploadDate",
+    label: "Fecha de cargue",
     minWidth: 170,
-    align: 'left',
-    format: (value: string) => new Date(value).toLocaleString()
+    align: "left",
+    format: (value: string) => new Date(value).toLocaleString(),
   },
-  { id: 'user', label: 'Encargado', minWidth: 170, align: 'left' },
-  { id: 'accion', label: 'Acción', minWidth: 170, align: 'left' }
+  { id: "user", label: "Encargado", minWidth: 170, align: "left" },
+  { id: "accion", label: "Acción", minWidth: 170, align: "left" },
 ];
 interface ApiResponseItem {
   id: number;
@@ -60,18 +60,18 @@ export default function UploadsDate() {
 
   useEffect(() => {
     // Obtiene el token del almacenamiento local
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
 
     // Verifica si el token está presente
     if (token) {
       // Construye la cabecera de la solicitud con el token
       const headers = {
-        Authorization: `Bearer ${token}`
+        Authorization: `Bearer ${token}`,
       };
 
       // Realiza la solicitud fetch con la cabecera de autorización
       fetch(`${import.meta.env.VITE_APP_API_BASE_URL}/excel`, {
-        headers: headers
+        headers: headers,
       })
         .then((response) => response.json())
         .then((data: ApiResponseItem[]) => {
@@ -79,7 +79,7 @@ export default function UploadsDate() {
             .map((item) => {
               const username = item.idUser
                 ? item.idUser.username
-                : 'Desconocido';
+                : "Desconocido";
               return createData(item.id, item.uploadDate, username);
             })
             .reverse();
@@ -89,14 +89,14 @@ export default function UploadsDate() {
           //console.log('Datos recibidos:', mappedData);
         })
         .catch((error) => {
-          console.error('Error fetching data:', error);
+          console.error("Error fetching data:", error);
         });
     } else {
-      console.error('Token not present. Redirect to login page.');
+      console.error("Token not present. Redirect to login page.");
     }
   }, []);
 
-  const handleChangePage = (event: unknown, newPage: number) => {
+  const handleChangePage = (_event: unknown, newPage: number) => {
     setPage(newPage);
   };
 
@@ -115,7 +115,7 @@ export default function UploadsDate() {
   return (
     <>
       {showUploadsDate && (
-        <Paper sx={{ width: '100%', overflow: 'hidden' }}>
+        <Paper sx={{ width: "100%", overflow: "hidden" }}>
           <TableContainer sx={{ maxHeight: 440 }}>
             <Table stickyHeader aria-label="sticky table">
               <TableHead>
@@ -124,8 +124,7 @@ export default function UploadsDate() {
                     <TableCell
                       key={column.id}
                       align={column.align}
-                      style={{ minWidth: column.minWidth }}
-                    >
+                      style={{ minWidth: column.minWidth }}>
                       {column.label}
                     </TableCell>
                   ))}
@@ -137,15 +136,14 @@ export default function UploadsDate() {
                   .map((row) => (
                     <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
                       {columns.map((column) => {
-                        if (column.id === 'accion') {
+                        if (column.id === "accion") {
                           return (
                             <TableCell key={column.id} align={column.align}>
                               <Button
                                 variant="contained"
                                 color="primary"
                                 onClick={() => handleViewClick(row.uploadDate)}
-                                style={{ color: 'white' }}
-                              >
+                                style={{ color: "white" }}>
                                 Ver
                               </Button>
                             </TableCell>
@@ -154,7 +152,7 @@ export default function UploadsDate() {
                         const value = row[column.id as keyof Data];
                         return (
                           <TableCell key={column.id} align={column.align}>
-                            {column.format ? column.format(value) : value ?? ''}
+                            {column.format ? column.format(value) : value ?? ""}
                           </TableCell>
                         );
                       })}

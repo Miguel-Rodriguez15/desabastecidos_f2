@@ -4,7 +4,6 @@ import {
   Box,
   Grid,
   Typography,
-  useTheme,
   styled,
   Avatar,
   Divider,
@@ -12,15 +11,13 @@ import {
   ListItem,
   ListItemText,
   List,
-  ListItemAvatar
-} from '@mui/material';
-import TextSnippetIcon from '@mui/icons-material/TextSnippet';
-import Text from './components/Text';
-import type { ApexOptions } from 'apexcharts';
-import * as React from 'react';
-import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
-import { pink, red } from '@mui/material/colors';
+  ListItemAvatar,
+} from "@mui/material";
+import TextSnippetIcon from "@mui/icons-material/TextSnippet";
+
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
+import { red } from "@mui/material/colors";
 const AvatarSuccess = styled(Avatar)(
   ({ theme }) => `
       background-color: ${theme.colors.success.main};
@@ -40,10 +37,11 @@ const ListItemAvatarWrapper = styled(ListItemAvatar)(
   margin-right: ${theme.spacing(1)};
   padding: ${theme.spacing(0.5)};
   border-radius: 60px;
-  background: ${theme.palette.mode === 'dark'
+  background: ${
+    theme.palette.mode === "dark"
       ? theme.colors.alpha.trueWhite[30]
       : alpha(theme.colors.alpha.black[100], 0.07)
-    };
+  };
 
   img {
     background: ${theme.colors.alpha.trueWhite[100]};
@@ -57,81 +55,16 @@ const ListItemAvatarWrapper = styled(ListItemAvatar)(
 );
 
 function AccountBalance() {
-  const theme = useTheme();
-
-  const chartOptions: ApexOptions = {
-    chart: {
-      background: 'transparent',
-      stacked: false,
-      toolbar: {
-        show: false
-      }
-    },
-    plotOptions: {
-      pie: {
-        donut: {
-          size: '60%'
-        }
-      }
-    },
-    colors: ['#ff9900', '#1c81c2', '#333', '#5c6ac0'],
-    dataLabels: {
-      enabled: true,
-      formatter: function (val) {
-        return val + '%';
-      },
-      style: {
-        colors: [theme.colors.alpha.trueWhite[100]]
-      },
-      background: {
-        enabled: true,
-        foreColor: theme.colors.alpha.trueWhite[100],
-        padding: 8,
-        borderRadius: 4,
-        borderWidth: 0,
-        opacity: 0.3,
-        dropShadow: {
-          enabled: true,
-          top: 1,
-          left: 1,
-          blur: 1,
-          color: theme.colors.alpha.black[70],
-          opacity: 0.5
-        }
-      },
-      dropShadow: {
-        enabled: true,
-        top: 1,
-        left: 1,
-        blur: 1,
-        color: theme.colors.alpha.black[50],
-        opacity: 0.5
-      }
-    },
-    fill: {
-      opacity: 1
-    },
-
-    stroke: {
-      width: 0
-    },
-    theme: {
-      mode: theme.palette.mode
-    }
-  };
-
-  const chartSeries = [10, 20, 25, 45];
-
-  const VisuallyHiddenInput = styled('input')({
-    clip: 'rect(0 0 0 0)',
-    clipPath: 'inset(50%)',
+  const VisuallyHiddenInput = styled("input")({
+    clip: "rect(0 0 0 0)",
+    clipPath: "inset(50%)",
     height: 1,
-    overflow: 'hidden',
-    position: 'absolute',
+    overflow: "hidden",
+    position: "absolute",
     bottom: 0,
     left: 0,
-    whiteSpace: 'nowrap',
-    width: 1
+    whiteSpace: "nowrap",
+    width: 1,
   });
   return (
     <Card>
@@ -148,28 +81,25 @@ function AccountBalance() {
             </Typography> */}
             <Box>
               <Typography variant="h3" gutterBottom>
-                Carga en este modulo tu archivo .xlsx{' '}
+                Carga en este modulo tu archivo .xlsx{" "}
               </Typography>
               <Typography
                 variant="h4"
                 fontWeight="normal"
-                color="text.secondary"
-              >
+                color="text.secondary">
                 Para el uso correcto del sistema leer las palabras en rojo
               </Typography>
               <Box
                 display="flex"
                 sx={{
-                  py: 4
+                  py: 4,
                 }}
-                alignItems="center"
-              >
+                alignItems="center">
                 <AvatarSuccess
                   sx={{
-                    mr: 2
+                    mr: 2,
                   }}
-                  variant="rounded"
-                >
+                  variant="rounded">
                   <TextSnippetIcon fontSize="large" />
                 </AvatarSuccess>
                 <Box>
@@ -187,8 +117,7 @@ function AccountBalance() {
                   role={undefined}
                   variant="contained"
                   tabIndex={-1}
-                  startIcon={<CloudUploadIcon />}
-                >
+                  startIcon={<CloudUploadIcon />}>
                   Cargar archivo
                   <VisuallyHiddenInput type="file" />
                 </Button>
@@ -203,20 +132,18 @@ function AccountBalance() {
         </Grid>
         <Grid
           sx={{
-            position: 'relative'
+            position: "relative",
           }}
           display="flex"
           alignItems="center"
           item
           xs={12}
-          md={6}
-        >
+          md={6}>
           <Box
             component="span"
             sx={{
-              display: { xs: 'none', md: 'inline-block' }
-            }}
-          >
+              display: { xs: "none", md: "inline-block" },
+            }}>
             <Divider absolute orientation="vertical" />
           </Box>
           <Box py={4} pr={4} pl={4} flex={1}>
@@ -224,19 +151,17 @@ function AccountBalance() {
               <List
                 disablePadding
                 sx={{
-                  width: '100%'
-                }}
-              >
+                  width: "100%",
+                }}>
                 <ListItem disableGutters>
                   <ListItemAvatarWrapper>
                     <CalendarMonthIcon
                       fontSize="large"
-                      sx={{ color: red[500] }}
-                    ></CalendarMonthIcon>
+                      sx={{ color: red[500] }}></CalendarMonthIcon>
                   </ListItemAvatarWrapper>
                   <ListItemText
                     primary="Archivos en Base de datos"
-                    primaryTypographyProps={{ variant: 'h5', noWrap: true }}
+                    primaryTypographyProps={{ variant: "h5", noWrap: true }}
                   />
                   <Box>
                     <Typography align="right" variant="h4" noWrap>
@@ -248,12 +173,11 @@ function AccountBalance() {
                   <ListItemAvatarWrapper>
                     <CalendarMonthIcon
                       fontSize="large"
-                      sx={{ color: red[500] }}
-                    ></CalendarMonthIcon>
+                      sx={{ color: red[500] }}></CalendarMonthIcon>
                   </ListItemAvatarWrapper>
                   <ListItemText
                     primary="Archivos en el mes"
-                    primaryTypographyProps={{ variant: 'h5', noWrap: true }}
+                    primaryTypographyProps={{ variant: "h5", noWrap: true }}
                   />
                   <Box>
                     <Typography align="right" variant="h4" noWrap>
@@ -265,12 +189,11 @@ function AccountBalance() {
                   <ListItemAvatarWrapper>
                     <CalendarMonthIcon
                       fontSize="large"
-                      sx={{ color: red[500] }}
-                    ></CalendarMonthIcon>
+                      sx={{ color: red[500] }}></CalendarMonthIcon>
                   </ListItemAvatarWrapper>
                   <ListItemText
                     primary="Archivos en la semana"
-                    primaryTypographyProps={{ variant: 'h5', noWrap: true }}
+                    primaryTypographyProps={{ variant: "h5", noWrap: true }}
                   />
                   <Box>
                     <Typography align="right" variant="h4" noWrap>
@@ -282,12 +205,11 @@ function AccountBalance() {
                   <ListItemAvatarWrapper>
                     <CalendarMonthIcon
                       fontSize="large"
-                      sx={{ color: red[500] }}
-                    ></CalendarMonthIcon>
+                      sx={{ color: red[500] }}></CalendarMonthIcon>
                   </ListItemAvatarWrapper>
                   <ListItemText
                     primary="Archivos cargados hoy"
-                    primaryTypographyProps={{ variant: 'h5', noWrap: true }}
+                    primaryTypographyProps={{ variant: "h5", noWrap: true }}
                   />
                   <Box>
                     <Typography align="right" variant="h4" noWrap>

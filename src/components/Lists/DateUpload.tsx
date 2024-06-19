@@ -99,14 +99,12 @@ const DateUpload: React.FC<DateUploadProps> = ({ uploadDate, onBack }) => {
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-
     const fetchDataFromAPI = async () => {
       try {
         const endpoint = `/excel/by-upload-date?uploadDate=${uploadDate}`;
         const responseData = await fetchData(endpoint);
         const mergedData = responseData?.reduce(
-          (accumulator, currentObject) =>
+          (accumulator: string | any[], currentObject: { data: any }) =>
             accumulator.concat(currentObject.data),
           []
         );
@@ -119,7 +117,7 @@ const DateUpload: React.FC<DateUploadProps> = ({ uploadDate, onBack }) => {
     fetchDataFromAPI();
   }, [uploadDate]);
 
-  const handleChangePage = (event: unknown, newPage: number) => {
+  const handleChangePage = (_event: unknown, newPage: number) => {
     setPage(newPage);
   };
 

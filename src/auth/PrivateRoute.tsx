@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import { Navigate, Outlet } from 'react-router-dom';
+import { useEffect, useState } from "react";
+import { Navigate, Outlet } from "react-router-dom";
 
 const isTokenPresent = () => {
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem("token");
   return token !== null;
 };
 

@@ -6,8 +6,6 @@ import {
   Typography,
   styled,
   Avatar,
-  alpha,
-  ListItemAvatar,
 } from "@mui/material";
 import TextSnippetIcon from "@mui/icons-material/TextSnippet";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
@@ -29,30 +27,6 @@ const AvatarSuccess = styled(Avatar)(
 `
 );
 
-const ListItemAvatarWrapper = styled(ListItemAvatar)(
-  ({ theme }) => `
-  min-width: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-right: ${theme.spacing(1)};
-  padding: ${theme.spacing(0.5)};
-  border-radius: 60px;
-  background: ${theme.palette.mode === "dark"
-      ? theme.colors.alpha.trueWhite[30]
-      : alpha(theme.colors.alpha.black[100], 0.07)
-    };
-
-  img {
-    background: ${theme.colors.alpha.trueWhite[100]};
-    padding: ${theme.spacing(0.5)};
-    display: block;
-    border-radius: inherit;
-    height: ${theme.spacing(4.5)};
-    width: ${theme.spacing(4.5)};
-  }
-`
-);
 function UploadExcel({ onUploadSuccess }: UploadExcelProps) {
   const [file, setFile] = useState<File | null>(null);
   const [fileName, setFileName] = useState<string>("");
@@ -60,7 +34,6 @@ function UploadExcel({ onUploadSuccess }: UploadExcelProps) {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [serverMessage, setServerMessage] = useState("");
   const [reloadComponent, setReloadComponent] = useState(false);
-  const token = localStorage.getItem("token");
   const user = JSON.parse(localStorage.getItem("user") ?? "{}");
   const Userid = user.id;
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -84,7 +57,7 @@ function UploadExcel({ onUploadSuccess }: UploadExcelProps) {
       setReloadComponent(false);
     }
   }, [reloadComponent]);
-  const [stats, setStats] = useState({
+  const [_stats, setStats] = useState({
     dbFiles: 0,
     monthFiles: 0,
     weekFiles: 0,
@@ -93,33 +66,34 @@ function UploadExcel({ onUploadSuccess }: UploadExcelProps) {
   useEffect(() => {
     if (!file) return;
 
-    const token = localStorage.getItem("token");
-
     const fetchStats = async () => {
       try {
         const data = await fetchData("/excel");
         const now = new Date();
 
         const dbFiles = data?.length ?? 0;
-        const monthFiles = data?.filter((item: { uploadDate: string | number | Date; }) => {
-          const date = new Date(item.uploadDate);
-          return (
-            date.getMonth() === now.getMonth() &&
-            date.getFullYear() === now.getFullYear()
-          );
-        }).length ?? 0;
+        const monthFiles =
+          data?.filter((item: { uploadDate: string | number | Date }) => {
+            const date = new Date(item.uploadDate);
+            return (
+              date.getMonth() === now.getMonth() &&
+              date.getFullYear() === now.getFullYear()
+            );
+          }).length ?? 0;
 
-        const weekFiles = data?.filter((item: { uploadDate: string | number | Date; }) => {
-          const date = new Date(item.uploadDate);
-          const oneWeekAgo = new Date();
-          oneWeekAgo.setDate(now.getDate() - 7);
-          return date >= oneWeekAgo && date <= now;
-        }).length ?? 0;
+        const weekFiles =
+          data?.filter((item: { uploadDate: string | number | Date }) => {
+            const date = new Date(item.uploadDate);
+            const oneWeekAgo = new Date();
+            oneWeekAgo.setDate(now.getDate() - 7);
+            return date >= oneWeekAgo && date <= now;
+          }).length ?? 0;
 
-        const todayFiles = data?.filter((item: { uploadDate: string | number | Date; }) => {
-          const date = new Date(item.uploadDate);
-          return date.toDateString() === now.toDateString();
-        }).length ?? 0;
+        const todayFiles =
+          data?.filter((item: { uploadDate: string | number | Date }) => {
+            const date = new Date(item.uploadDate);
+            return date.toDateString() === now.toDateString();
+          }).length ?? 0;
 
         setStats({
           dbFiles,

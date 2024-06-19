@@ -1,5 +1,10 @@
-import React, { createContext, useState, useEffect, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, {
+  createContext,
+  useState,
+  useEffect,
+  useContext,
+  ReactNode,
+} from "react";
 interface AuthContextType {
   auth: { token: string | null; isAuthenticated: boolean };
   login: (token: string) => void;
@@ -9,26 +14,31 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType>({
   auth: { token: null, isAuthenticated: false },
   login: () => {},
-  logout: () => {}
+  logout: () => {},
 });
 
-export const AuthProvider: React.FC = ({ children }) => {
-  const [auth, setAuth] = useState({ token: null, isAuthenticated: false });
+export const AuthProvider: React.FC<{ children: ReactNode }> = ({
+  children,
+}) => {
+  const [auth, setAuth] = useState<{
+    token: string | null;
+    isAuthenticated: boolean;
+  }>({ token: null, isAuthenticated: false });
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
     if (token) {
       setAuth({ token, isAuthenticated: true });
     }
   }, []);
 
   const login = (token: string) => {
-    localStorage.setItem('token', token);
+    localStorage.setItem("token", token);
     setAuth({ token, isAuthenticated: true });
   };
 
   const logout = () => {
-    localStorage.removeItem('token');
+    localStorage.removeItem("token");
     setAuth({ token: null, isAuthenticated: false });
   };
 
